@@ -1,31 +1,54 @@
-**Grabit: Bridging the Gap Between Surplus and Sustenance**
+# 🥗 Grabit: Bridging the Gap Between Surplus and Sustenance
 
-**Theme:** Social Good & Sustainability
-Grabit is a real-time, AI-driven marketplace designed to combat urban food waste by connecting restaurants with surplus inventory to local consumers at discounted prices.
- Problem Statement: Every day, perfectly edible food is discarded by restaurants due to overproduction. This isn't just a financial loss; it’s a sustainability crisis.
-**Who it affects:** Local businesses (lost revenue) and budget-conscious consumers (limited access to quality food).
-**Why it matters:** Food waste is a leading contributor to methane emissions. By facilitating the "last-mile" sale of leftovers, we turn potential waste into affordable meals.
-**Technical Architecture**
-We moved beyond simple API wrappers to build a multi-layered automated pipeline.
-**Frontend:** Angular – a seamless dashboard for both Restaurants (to post) and Users (to manage preferences).
-**Backend:** PostgreSQL on GCP (Cloud SQL) –  For storing complex user-to-cuisine mapping and historical waste logs.
-**Agentic AI Pipeline:** Developed in Google Colab & VS Code.
-**Depth:** Instead of a basic chatbot, our Agent acts as a Data Extractor. It parses unstructured restaurant "shouts" (e.g., "Got 5 veg plates left, 50% off until 10pm"), identifies key entities, and triggers the matching logic.
-**Smart-Matching Engine:** Custom Python logic that performs a "Pref-Join" between real-time AI entities and the PostgreSQL user-base to trigger automated notifications.
-**Innovation & Originality**
-**While many apps use GenAI for chat, Grabit uses it as a Structural Parser:**
-We don't use AI to "talk" to the user; we use it to transform data. The AI extracts the "What, How Much, and When," passing structured data to our custom backend logic.
-Unlike "search-and-find" apps, Grabit is a Push System. Users don't have to look for food; the food (via AI matching) finds them based on their pre-set DNA (Cuisine + Restaurant preferences).
-A dedicated visualization suite that shows restaurants the "Total Loss Occurred," forcing a data-driven realization of their environmental footprint.
-**Social Impact & Sustainability Goals**
-Reduce daily CO2 footprint per participating restaurant.
-Provide high-protein, quality meals to students and low-income users at a 40-70% discount.
-Use the Waste Visualization data to help restaurants implement "Lean Manufacturing" principles and adjusting their supply chain to prevent the loss before it happens.
-**Future Roadmap**
-Predictive Waste Analytics: Moving from reactive to proactive. By analyzing "Loss Occurred" trends, Grabit will provide restaurants with Demand Forecasting reports, suggesting prep-volume adjustments to prevent waste before it happens.
-Dynamic Pricing Engine: Implement an automated "Price-Decay" algorithm. As the pickup deadline approaches, the AI will dynamically adjust the discount (e.g., 40% off at 8 PM, 70% off at 9:30 PM) to ensure 100% inventory clearance.
-Online In-App Booking: Integrated payment gateways to allow users to "Claim" their meal instantly, removing the uncertainty of availability upon arrival.
-Conclusion
-Grabit isn't just an app; it’s an Operational Strategy. By combining Angular’s reactive interface, PostgreSQL’s reliable data architecture on GCP, and the analytical power of Agentic AI, we are turning a massive environmental problem into a community-driven solution.
+**Grabit** is a real-time, AI-driven marketplace designed to combat urban food waste. By connecting restaurants with surplus inventory to local consumers at deeply discounted prices, we transform potential waste into affordable, high-quality meals.
 
+---
 
+## 📌 Project Overview
+* **Theme:** Social Good & Sustainability
+* **Core Mission:** To eliminate urban food waste through "last-mile" sales and data-driven inventory management.
+* **The Problem:** Overproduction leads to financial loss for businesses and an environmental crisis (methane emissions), while budget-conscious consumers struggle to access quality nutrition.
+
+---
+
+## ⚙️ Technical Architecture
+
+Grabit moves beyond simple API wrappers to a multi-layered automated pipeline.
+
+### **The Stack**
+* **Frontend:** **Angular** – A seamless, reactive dashboard for both Restaurants (to post inventory) and Users (to manage preferences).
+* **Backend:** **PostgreSQL on GCP (Cloud SQL)** – Optimized for storing complex user-to-cuisine mapping and historical waste logs.
+* **Agentic AI Pipeline:** Developed in Google Colab & VS Code.
+
+### **The Innovation: AI as a Structural Parser**
+Instead of using GenAI as a "chatbot," Grabit utilizes it as a **Structural Parser**:
+1.  **Data Extraction:** The AI parses unstructured restaurant "shouts" (e.g., *"Got 5 veg plates left, 50% off until 10pm"*).
+2.  **Entity Identification:** It identifies the "What, How Much, and When," passing structured data to our custom backend.
+3.  **Smart-Matching Engine:** Custom Python logic performs a **"Pref-Join"** between real-time AI entities and the PostgreSQL user-base.
+4.  **Push System:** Users don't search for food; the food (via AI matching) finds them based on their pre-set "Food DNA" (Cuisine + Restaurant preferences).
+
+---
+
+## 🚀 Key Features
+
+* **Real-Time Notifications:** Automated alerts triggered by the matching engine.
+* **Waste Visualization:** A dedicated suite showing restaurants their "Total Loss Occurred," forcing a data-driven realization of their environmental footprint.
+* **Lean Manufacturing Integration:** Using data to help restaurants adjust their supply chain to prevent loss before it happens.
+
+---
+
+## 🌍 Sustainability & Social Impact
+
+* **Carbon Reduction:** Lowering the daily CO2 footprint of participating local businesses.
+* **Nutrition Accessibility:** Providing high-protein meals to students and low-income users at **40-70% discounts**.
+* **Operational Strategy:** Shifting the industry from reactive disposal to proactive inventory management.
+
+---
+
+## 🗺️ Future Roadmap
+
+1.  **Predictive Waste Analytics:** Moving from reactive to proactive by analyzing "Loss Occurred" trends to provide Demand Forecasting reports.
+2.  **Dynamic Pricing Engine:** An automated "Price-Decay" algorithm where discounts increase (e.g., 40% → 70%) as the pickup deadline approaches.
+3.  **In-App Booking:** Integrated payment gateways to allow users to "Claim" their meal instantly, removing availability uncertainty.
+
+---
