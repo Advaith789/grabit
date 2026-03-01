@@ -5,6 +5,8 @@ from sqlalchemy import create_engine, Column, String
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 # Crucial: JSONB is explicitly imported and used here
 from sqlalchemy.dialects.postgresql import array, JSONB
+from pydantic import BaseModel
+from typing import List
 
 # Replace with your GCP database details
 DATABASE_URL = "postgresql://postgres:oaktree301@34.55.89.30/spottedcow_db"
@@ -70,6 +72,10 @@ class EmailPayload(BaseModel):
 class RestaurantSearchPayload(BaseModel):
     restaurants: list[str]
 
+class UserUpdate(BaseModel):
+    user_email: str
+    preferences: List[str]
+
 # --- Endpoints ---
 
 @app.post("/users/signup")
@@ -100,6 +106,16 @@ def get_user_details(payload: EmailPayload, db: Session = Depends(get_db)):
         "user_email": db_user.user_email,
         "preferences": db_user.preferences
     }
+
+
+@app.post("/users/update-preferences")
+def update_preferences(payload: UserUpdate, db: Session = Depends(get_db)):
+    db_user = db.query(DBUser).filter(DBUser.user_email == payload.user_email).first()
+    if db_user:
+        db_user.preferences = payload.preferences
+        db.commit()
+        return {"status": "success"}
+    return {"status": "error", "message": "User not found"}
 
 @app.post("/restaurants/signup")
 def restaurant_signup(restaurant: RestaurantCreate, db: Session = Depends(get_db)):

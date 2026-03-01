@@ -1,4 +1,4 @@
-<div style="max-width: 400px; margin: 40px auto; font-family: sans-serif;">
+<!-- <div style="max-width: 400px; margin: 40px auto; font-family: sans-serif;">
   
   <div *ngIf="step === 1">
     <h2>Welcome</h2>
@@ -43,6 +43,63 @@
     <br>
     <button (click)="signUp()" style="padding: 8px 16px; margin-right: 8px;">Sign Up</button>
     <button (click)="step = 1" style="padding: 8px 16px;">Cancel</button>
+  </div>
+
+</div> -->
+
+<div class="portal-container">
+
+  <div *ngIf="step === 1" class="card fade-in">
+    <h2>Welcome to Grabit</h2>
+    <p>Enter your email to begin</p>
+    <input type="email" [(ngModel)]="email" class="main-input" placeholder="Email address">
+    <button (click)="checkEmail()" class="btn-primary">Next</button>
+  </div>
+
+  <div *ngIf="step === 2 || step === 3" class="fade-in">
+    <div class="header-section">
+      <h2 *ngIf="step === 2">Welcome back, {{ name }}!</h2>
+      <h2 *ngIf="step === 3">Create Account</h2>
+      <p *ngIf="step === 2">Your saved preferences, just check and uncheck them to update, they will be updated instantly</p>
+      <p *ngIf="step === 3">Set up your profile and select favorites:</p>
+    </div>
+
+    <div *ngIf="step === 3" class="name-field">`
+      <input type="text" [(ngModel)]="name" class="main-input" placeholder="Your Full Name">
+    </div>
+
+    <div class="tags-container">
+  <p class="tags-label">Some popular tags you may want to select</p>
+  <div class="tags-list">
+    <span *ngFor="let tag of tags" 
+          class="tag" 
+          [class.tag-active]="userRestaurants.includes(tag)"
+          (click)="handleCardClick(tag)">
+      {{ tag }}
+    </span>
+  </div>
+</div>
+
+
+    <div class="restaurant-grid">
+      <div *ngFor="let rest of allRestaurants" class="restaurant-card"
+        [class.selected]="userRestaurants.includes(rest.restaurant_name)"
+        (click)="handleCardClick(rest.restaurant_name)">
+
+        <div class="card-content">
+          <span class="restaurant-icon">🍽️</span>
+          <span class="restaurant-title">{{ rest.restaurant_name }}</span>
+          <span *ngIf="userRestaurants.includes(rest.restaurant_name)" class="check-badge">✓</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-footer">
+      <button *ngIf="step === 3" (click)="signUp()" class="btn-primary">Complete Sign Up</button>
+      <button (click)="step = 1; email = ''; userRestaurants = []" class="btn-secondary">
+        {{ step === 2 ? 'Back' : 'Cancel' }}
+      </button>
+    </div>
   </div>
 
 </div>

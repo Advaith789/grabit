@@ -1,0 +1,207 @@
+.portal-container {
+  max-width: 40%;
+  margin: 60px auto;
+  font-family: 'Inter', sans-serif;
+  padding: 0 20px;
+}
+
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.main-input {
+  width: 100%;
+  padding: 12px;
+  margin: 15px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.restaurant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 25px 0;
+}
+
+.restaurant-card {
+  border: 2px solid #eee;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  background: #fafafa;
+}
+
+.restaurant-card:hover {
+  border-color: #007bff;
+  transform: translateY(-2px);
+}
+
+.restaurant-card.selected {
+  border-color: #007bff;
+  background: #e7f1ff;
+}
+
+.restaurant-card input {
+  position: absolute;
+  opacity: 0;
+}
+
+.card-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.restaurant-icon { font-size: 2rem; margin-bottom: 10px; }
+.restaurant-title { font-weight: 600; color: #333; text-transform: capitalize; }
+
+.btn-primary {
+  background: #007bff; color: white; border: none;
+  padding: 12px 24px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600;
+}
+
+.btn-secondary {
+  background: none; border: none; color: #666; cursor: pointer; margin-top: 15px;
+}
+
+.restaurant-card {
+  position: relative;
+  user-select: none; /* Prevents text highlighting when double-clicking cards */
+  transition: transform 0.1s active;
+}
+
+.restaurant-card:active {
+  transform: scale(0.98); /* Slight squish effect when clicked */
+}
+
+.check-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #007bff;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tags-container {
+  margin-bottom: 25px;
+  padding: 10px 0;
+}
+
+.tags-label {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tags-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto; /* Allows scrolling on mobile if tags overflow */
+  padding-bottom: 5px;
+  scrollbar-width: none; /* Hides scrollbar for clean look */
+}
+
+.tags-list::-webkit-scrollbar {
+  display: none; /* Hides scrollbar on Chrome/Safari */
+}
+
+.tag {
+  background: #f0f2f5;
+  color: #444;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.tag:hover {
+  background: #e4e6e9;
+  border-color: #ced4da;
+}
+
+.tags-container {
+  margin-bottom: 30px;
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+}
+
+.tags-label {
+  font-size: 0.75rem;
+  color: #999;
+  margin-bottom: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tag {
+  background: #f8f9fa;
+  color: #555;
+  padding: 6px 14px;
+  border-radius: 6px; /* Slightly more rectangular for a modern look */
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tag-active {
+  background-color: #007bff !important;
+  color: #ffffff !important;
+  border-color: #007bff;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap; /* This ensures tags move to the next line */
+  gap: 10px;      /* Spacing between tags (horizontal and vertical) */
+  padding: 5px 0;
+}
+
+.tag {
+  background: #f8f9fa;
+  color: #555;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap; /* Keeps the text of a single tag on one line */
+}
+
+.tag-active {
+  background-color: #007bff !important;
+  color: #ffffff !important;
+  border-color: #007bff;
+}
