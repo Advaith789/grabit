@@ -1,7 +1,9 @@
 import psycopg2
+import os
+from dotenv import load_dotenv
 
-# Paste your full connection string here
-DB_URI = "postgresql://postgres:oaktree301@34.55.89.30/spottedcow_db"
+load_dotenv()
+DB_URI = os.getenv("DB_URI")
 
 def view_data():
     print("Connecting to the database...\n")

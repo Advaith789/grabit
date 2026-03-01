@@ -3,11 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, String
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
-# Crucial: JSONB is explicitly imported and used here
 from sqlalchemy.dialects.postgresql import array, JSONB
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Replace with your GCP database details
-DATABASE_URL = "postgresql://postgres:oaktree301@34.55.89.30/spottedcow_db"
+DATABASE_URL = os.getenv("DB_URI")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

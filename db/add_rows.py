@@ -1,8 +1,10 @@
 import psycopg2
 import json
+import os
+from dotenv import load_dotenv
 
-# Paste your full connection string here
-DB_URI = "postgresql://postgres:oaktree301@34.55.89.30/spottedcow_db"
+load_dotenv()
+DB_URI = os.getenv("DB_URI")
 
 def add_mock_user():
     """Injects a row into the 'users' table."""
@@ -71,7 +73,7 @@ def add_mock_log():
     
     # ─── EDIT THIS DATA ──────────────────────────────
     r_name = "ian's pizza"
-    log_message = "We have leftover avacado sushi."
+    log_message = "We have leftover 100 cheesecurds."
     # ─────────────────────────────────────────────────
     
     print(f"Adding log for restaurant: {r_name}...")
