@@ -63,3 +63,8 @@ spottedcows-frontend/coverage/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+# spotted ml
+spottedcows-ml
+spottedcow_viz/sec.py

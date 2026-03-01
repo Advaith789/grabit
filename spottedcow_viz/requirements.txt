@@ -1,0 +1,5 @@
+functions-framework==3.*
+pandas
+matplotlib
+psycopg2-binary
+google-cloud-storage
