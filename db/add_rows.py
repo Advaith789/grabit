@@ -75,8 +75,8 @@ def add_mock_log():
     """Injects a row into the 'logs' table to trigger the AI Worker."""
 
     # ─── EDIT THIS DATA ──────────────────────────────
-    r_name = "Sylus"
-    log_message = "We have thai rice and chicken burger with love from Sylus for people who obsess for Love in Deep Space"
+    r_name = "Ians"
+    log_message = "We have excess fish and crabs"
     # ─────────────────────────────────────────────────
 
     print(f"Adding log for restaurant: {r_name}...")
