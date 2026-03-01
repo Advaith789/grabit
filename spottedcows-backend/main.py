@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, String
+from sqlalchemy import create_engine, Column, String, text
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 # Crucial: JSONB is explicitly imported and used here
 from sqlalchemy.dialects.postgresql import array, JSONB
@@ -85,10 +85,13 @@ def user_signup(user: UserCreate, db: Session = Depends(get_db)):
     if db_user:
         return {"message": "User exists", "restaurants": db_user.preferences}
     
+    
+    lowercased_prefs = [p.lower() for p in user.preferences]
+
     new_user = DBUser(
         user_name=user.user_name, 
         user_email=user.user_email, 
-        preferences=user.preferences
+        preferences=lowercased_prefs
     )
     db.add(new_user)
     db.commit()
@@ -112,7 +115,9 @@ def get_user_details(payload: EmailPayload, db: Session = Depends(get_db)):
 def update_preferences(payload: UserUpdate, db: Session = Depends(get_db)):
     db_user = db.query(DBUser).filter(DBUser.user_email == payload.user_email).first()
     if db_user:
-        db_user.preferences = payload.preferences
+        lowercased_prefs = [p.lower() for p in payload.preferences]
+        
+        db_user.preferences = lowercased_prefs
         db.commit()
         return {"status": "success"}
     return {"status": "error", "message": "User not found"}
@@ -124,8 +129,10 @@ def restaurant_signup(restaurant: RestaurantCreate, db: Session = Depends(get_db
     if db_restaurant:
         return {"message": "Already exists"}
     
+
+    
     new_restaurant = DBRestaurant(
-        restaurant_name=restaurant.restaurant_name, 
+        restaurant_name=restaurant.restaurant_name.lower(), 
         restaurant_email=restaurant.restaurant_email
     )
     db.add(new_restaurant)
@@ -143,19 +150,22 @@ def get_all_restaurants(db: Session = Depends(get_db)):
 
 @app.post("/restaurant/prompt")
 def restaurant_echo(payload: TextPayload, db: Session = Depends(get_db)):
+    # 1. Verify restaurant
     db_restaurant = db.query(DBRestaurant).filter(DBRestaurant.restaurant_email == payload.restaurant_email).first()
     if not db_restaurant:
         raise HTTPException(status_code=401, detail="Restaurant not recognized.")
     
-    print(f"Received text from {db_restaurant.restaurant_name}: {payload.text}")
-    return {"printed_text": payload.text}
+    # 2. Insert into logs table (This triggers the AI Agent Worker)
+    try:
+        db.execute(
+            text("INSERT INTO logs (restaurant_name, message) VALUES (:name, :msg)"),
+            {"name": db_restaurant.restaurant_name, "msg": payload.text}
+        )
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        print(f"🚨 Log error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to log message.")
 
-@app.post("/users/search-by-restaurants")
-def get_users_by_restaurant(payload: RestaurantSearchPayload, db: Session = Depends(get_db)):
-    # Returns the user_email for users whose JSONB array overlaps with the search payload
-    results = db.query(DBUser.user_email).filter(
-        DBUser.restaurants.op('?|')(array(payload.restaurants))
-    ).all()
-    
-    email_list = [row[0] for row in results]
-    return {"user_emails": email_list}
+    print(f"🚀 Log recorded for {db_restaurant.restaurant_name}")
+    return {"status": "Log recorded", "restaurant_name": db_restaurant.restaurant_name}
