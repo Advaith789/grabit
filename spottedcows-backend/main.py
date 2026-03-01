@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, String, text
+from sqlalchemy import Integer, create_engine, Column, String, text
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 # Crucial: JSONB is explicitly imported and used here
 from sqlalchemy.dialects.postgresql import array, JSONB
@@ -31,6 +31,16 @@ class DBRestaurant(Base):
     __tablename__ = "restaurants"
     restaurant_name = Column(String, index=True)
     restaurant_email = Column(String, primary_key=True, index=True)
+
+class DBFood(Base):
+    __tablename__ = "foods"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    # restaurant_email = Column(String, index=True) # Ensure this exists to filter by email!
+    restaurant_name = Column(String)
+    food_item = Column(String)
+    cuisine = Column(String)
+    quantity = Column(Integer)
 
 # 🚨 WARNING: These lines will wipe your GCP database and recreate empty tables 
 # with the new column names every time the server restarts! 
@@ -79,6 +89,9 @@ class RestaurantSearchPayload(BaseModel):
 class UserUpdate(BaseModel):
     user_email: str
     preferences: List[str]
+
+class DashboardRequest(BaseModel):
+    restaurant_email: str
 
 # --- Endpoints ---
 
@@ -173,3 +186,17 @@ def restaurant_echo(payload: TextPayload, db: Session = Depends(get_db)):
 
     print(f"🚀 Log recorded for {db_restaurant.restaurant_name}")
     return {"status": "Log recorded", "restaurant_name": db_restaurant.restaurant_name}
+
+@app.post("/dashboard")
+def get_dashboard_data(payload: DashboardRequest, db: Session = Depends(get_db)):
+    # 1. Find the restaurant's database record using the email from session storage
+    restaurant = db.query(DBRestaurant).filter(DBRestaurant.restaurant_email == payload.restaurant_email).first()
+    
+    # If the restaurant isn't found for some reason, return an empty list
+    if not restaurant:
+        return []
+        
+    # 2. Now query the foods table using the actual restaurant_name
+    foods = db.query(DBFood).filter(DBFood.restaurant_name == restaurant.restaurant_name).all()
+    
+    return foods

@@ -1,10 +1,13 @@
-<div style="max-width: 500px; margin: 50px auto; font-family: sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-  
+<div
+  style="max-width: 500px; margin: 50px auto; font-family: sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+
   <div *ngIf="step === 1">
     <h2>Restaurant Login</h2>
     <p>Enter your registered email to manage your portal.</p>
-    <input type="email" [(ngModel)]="email" placeholder="manager@restaurant.com" style="width: 100%; padding: 10px; margin-bottom: 15px;">
-    <button (click)="checkRestaurantEmail()" style="width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+    <input type="email" [(ngModel)]="email" placeholder="manager@restaurant.com"
+      style="width: 100%; padding: 10px; margin-bottom: 15px;">
+    <button (click)="checkRestaurantEmail()"
+      style="width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
       Continue
     </button>
   </div>
@@ -13,26 +16,40 @@
     <h2>Hi there!</h2>
     <p>Logged in as: <strong>{{ email }}</strong></p>
     <label>Enter your message or prompt:</label>
-    <textarea [(ngModel)]="promptText" rows="4" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px;"></textarea>
-    <button (click)="sendPrompt()" style="width: 100%; padding: 10px; background-color: #2196F3; color: white; border: none; cursor: pointer;">
+    <textarea [(ngModel)]="promptText" rows="4"
+      style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px;"></textarea>
+    <button (click)="sendPrompt()"
+      style="width: 100%; padding: 10px; background-color: #2196F3; color: white; border: none; cursor: pointer;">
       Submit Prompt
     </button>
+
+    <div *ngIf="step === 2">
+      <br>
+      <button routerLink="/dashboard"
+        style="width: 100%; padding: 10px; background-color: #673ab7; color: white; border: none; cursor: pointer; border-radius: 4px;">
+        Go to Dashboard
+      </button>
+    </div>
   </div>
 
   <div *ngIf="step === 3">
     <h2>Join the Network</h2>
     <p>We couldn't find <strong>{{ email }}</strong>. Please tell us your restaurant name to join.</p>
-    <input type="text" [(ngModel)]="name" placeholder="Restaurant Name" style="width: 100%; padding: 10px; margin-bottom: 15px;">
-    <button (click)="signUpRestaurant()" style="width: 100%; padding: 10px; background-color: #FF9800; color: white; border: none; cursor: pointer;">
+    <input type="text" [(ngModel)]="name" placeholder="Restaurant Name"
+      style="width: 100%; padding: 10px; margin-bottom: 15px;">
+    <button (click)="signUpRestaurant()"
+      style="width: 100%; padding: 10px; background-color: #FF9800; color: white; border: none; cursor: pointer;">
       Complete Signup
     </button>
   </div>
 
-  <div *ngIf="feedbackMessage" style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; border-left: 5px solid #333;">
+  <div *ngIf="feedbackMessage"
+    style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; border-left: 5px solid #333;">
     {{ feedbackMessage }}
   </div>
 
   <div *ngIf="step > 1" style="margin-top: 20px; text-align: center;">
-    <a href="javascript:void(0)" (click)="step = 1; feedbackMessage = ''; promptText = ''" style="color: #666; font-size: 0.9em;">Back to Login</a>
+    <a href="javascript:void(0)" (click)="step = 1; feedbackMessage = ''; promptText = ''"
+      style="color: #666; font-size: 0.9em;">Back to Login</a>
   </div>
 </div>

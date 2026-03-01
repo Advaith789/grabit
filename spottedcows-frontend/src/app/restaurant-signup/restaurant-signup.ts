@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../environments/environment';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-restaurant-signup',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './restaurant-signup.html',
   styleUrl: './restaurant-signup.css',
 })
@@ -33,6 +34,7 @@ export class RestaurantSignup implements OnInit {
   }
 
   checkRestaurantEmail() {
+    window.sessionStorage.setItem('restaurant_email', this.email); // Store email for later use
     if (!this.email) return;
 
     if (this.registeredEmails.includes(this.email)) {

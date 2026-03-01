@@ -1,0 +1,119 @@
+.dashboard-container {
+  max-width: 900px;
+  margin: 40px auto;
+  font-family: 'Inter', sans-serif;
+  padding: 0 20px;
+}
+
+.dashboard-header h2 { margin: 0 0 5px 0; color: #111; }
+.dashboard-header p { margin: 0 0 30px 0; color: #666; }
+
+.chart-card {
+  background: white;
+  padding: 30px 20px 30px 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  border: 1px solid #eaeaea;
+}
+
+.chart-wrapper {
+  position: relative;
+  margin-left: 20px;
+}
+
+/* Vertical Grid Lines */
+.grid-lines {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 180px; /* Aligns with the bar container */
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none; /* Lets clicks pass through to bars */
+}
+
+.grid-line {
+  width: 1px;
+  height: 100%;
+  background-color: #f0f0f0;
+}
+
+/* Chart Rows */
+.chart-content {
+  position: relative;
+  z-index: 1;
+}
+
+.chart-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.chart-row:last-child {
+  margin-bottom: 0;
+}
+
+/* Y-Axis Labels */
+.y-axis-label {
+  width: 160px;
+  padding-right: 20px;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.item-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+.rest-name {
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* The Plotting Area */
+.bar-container {
+  flex-grow: 1;
+  position: relative;
+  height: 36px;
+  border-left: 2px solid #ddd; /* The actual Y-axis line */
+}
+
+.bar {
+  height: 100%;
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  border-radius: 0 6px 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  box-sizing: border-box;
+  transition: width 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+  min-width: 2px;
+}
+
+/* Dynamic Value Label Placement */
+.bar-value {
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* If the bar is too short, the number moves outside the bar */
+.bar-value.outside {
+  color: #333;
+  position: absolute;
+  right: -30px; 
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
