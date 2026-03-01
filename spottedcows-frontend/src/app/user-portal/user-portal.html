@@ -1,0 +1,48 @@
+<div style="max-width: 400px; margin: 40px auto; font-family: sans-serif;">
+  
+  <div *ngIf="step === 1">
+    <h2>Welcome</h2>
+    <p>Enter your email to continue:</p>
+    <input type="email" [(ngModel)]="email" placeholder="Email address" style="padding: 8px; width: 100%;">
+    <br><br>
+    <button (click)="checkEmail()" style="padding: 8px 16px;">Next</button>
+  </div>
+
+  <div *ngIf="step === 2">
+    <h2>Welcome back, {{ name }}!</h2>
+    <p>Here are the restaurants you have saved:</p>
+    
+    <div *ngFor="let rest of allRestaurants" style="margin-bottom: 8px;">
+      <label>
+        <input type="checkbox" [checked]="userRestaurants.includes(rest.restaurant_name)"> 
+        {{ rest.restaurant_name }}
+      </label>
+    </div>
+    
+    <br>
+    <button (click)="step = 1; email = ''; userRestaurants = []" style="padding: 8px 16px;">Back</button>
+  </div>
+
+  <div *ngIf="step === 3">
+    <h2>Create an Account</h2>
+    <p>It looks like you are new here. Let's get you set up.</p>
+    
+    <div style="margin-bottom: 16px;">
+      <label>Name:</label><br>
+      <input type="text" [(ngModel)]="name" placeholder="Your Name" style="padding: 8px; width: 100%;">
+    </div>
+
+    <p>Select your favorite restaurants:</p>
+    <div *ngFor="let rest of allRestaurants" style="margin-bottom: 8px;">
+      <label>
+        <input type="checkbox" (change)="toggleRestaurant(rest.restaurant_name, $event)"> 
+        {{ rest.restaurant_name }}
+      </label>
+    </div>
+
+    <br>
+    <button (click)="signUp()" style="padding: 8px 16px; margin-right: 8px;">Sign Up</button>
+    <button (click)="step = 1" style="padding: 8px 16px;">Cancel</button>
+  </div>
+
+</div>
