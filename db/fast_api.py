@@ -26,9 +26,6 @@ class DBRestaurant(Base):
     restaurant_name = Column(String, index=True)
     restaurant_email = Column(String, primary_key=True, index=True)
 
-# 🚨 WARNING: These lines will wipe your GCP database and recreate empty tables 
-# with the new column names every time the server restarts! 
-# Comment out drop_all() once your schema is finalized.
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()

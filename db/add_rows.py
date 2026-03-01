@@ -28,19 +28,19 @@ def add_mock_user():
         cur.execute(query, (u_name, u_email, json.dumps(u_preferences)))
         conn.commit()
         
-        print(f"✅ Successfully added/updated user: {u_name} ({u_email})")
+        print(f"Successfully added/updated user: {u_name} ({u_email})")
         print(f"   Preferences: {u_preferences}\n")
         
         cur.close()
         conn.close()
     except Exception as e:
-        print(f"🚨 Failed to add user: {e}")
+        print(f"Failed to add user: {e}")
 
 def add_mock_restaurant():
     """Injects a row into the 'restaurants' table."""
     
     # ─── EDIT THIS DATA ──────────────────────────────
-    r_name = "ian's pizza"
+    r_name = "ians pizza"
     r_email = "manager@ianspizza.com"
     # ─────────────────────────────────────────────────
     
@@ -59,19 +59,19 @@ def add_mock_restaurant():
         cur.execute(query, (r_name, r_email))
         conn.commit()
         
-        print(f"✅ Successfully added/updated restaurant: {r_name} ({r_email})\n")
+        print(f"Successfully added/updated restaurant: {r_name} ({r_email})\n")
         
         cur.close()
         conn.close()
     except Exception as e:
-        print(f"🚨 Failed to add restaurant: {e}")
+        print(f"Failed to add restaurant: {e}")
 
 def add_mock_log():
     """Injects a row into the 'logs' table to trigger the AI Worker."""
     
     # ─── EDIT THIS DATA ──────────────────────────────
     r_name = "ian's pizza"
-    log_message = "We have 5 large pepperoni pizzas and a tray of breadsticks leftover. Also have biryani! Need someone to grab them ASAP."
+    log_message = "We have leftover avacado sushi."
     # ─────────────────────────────────────────────────
     
     print(f"Adding log for restaurant: {r_name}...")
@@ -87,14 +87,14 @@ def add_mock_log():
         cur.execute(query, (r_name, log_message))
         conn.commit()
         
-        print(f"✅ Successfully added log for: {r_name}")
+        print(f"Successfully added log for: {r_name}")
         print(f"   Message: '{log_message}'")
-        print("   👉 Check your agent_worker.py terminal to see if it triggered!\n")
+        print("   Check your agent_worker.py terminal to see if it triggered!\n")
         
         cur.close()
         conn.close()
     except Exception as e:
-        print(f"🚨 Failed to add log: {e}")
+        print(f"Failed to add log: {e}")
 
 
 if __name__ == "__main__":

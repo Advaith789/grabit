@@ -46,7 +46,7 @@ def view_schema():
         print("Schema extraction complete.")
 
     except psycopg2.OperationalError as e:
-        print(f"🚨 Connection failed: {e}")
+        print(f" Connection failed: {e}")
         print("Hint: Check your GCP Firewall rules. Make sure your current IP is in the 'Authorized Networks'.")
     except Exception as e:
         print(f"An error occurred: {e}")

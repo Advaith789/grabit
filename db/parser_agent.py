@@ -13,7 +13,6 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-
 load_dotenv()
 
 MODEL_NAME = "llama-3.3-70b-versatile"
@@ -30,73 +29,62 @@ class DBUser(Base):
     user_email = Column(String, primary_key=True, index=True)
     preferences = Column(JSONB, default=list) 
 
+# --- UPDATED SCHEMAS ---
 class FoodItem(BaseModel):
     name: str = Field(description="Main name of the food item")
     cuisine: Optional[str] = Field(description="The cuisine of the dish. Null if unknown.")
-    category: Optional[str] = Field(description="E.g., dairy, protein, carb. Null if unknown.")
-    dietary: list[str] = Field(description="List of dietary tags (e.g., vegetarian). Empty list if none.")
 
 class ExtractionResult(BaseModel):
     foods: list[FoodItem] = Field(description="List of extracted food items")
+    email_body: str = Field(description="A friendly, concise email message for the user about the specific leftovers.")
 
 def send_gmail_to_everyone(ai_output_list):
-    # --- CONFIGURATION ---
-    sender_email = "cheesehacksgrabit@gmail.com"  # Your Gmail address
-    app_password = "wcdv hxuy atro ndou"   # The 16-character App Password
+    sender_email = "cheesehacksgrabit@gmail.com"
+    app_password = "wcdv hxuy atro ndou" 
     
-    # Gmail SMTP settings
-    smtp_server = "smtp.gmail.com"
-    smtp_port = 587
-
     try:
-        # Connect to Gmail's server
         print("Connecting to Gmail server...")
-        # server = smtplib.SMTP(smtp_server, smtp_port)
-        # server.starttls()  # Secure the connection
-        # server.login(sender_email, app_password)
         server = smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30)
         server.login(sender_email, app_password)
         
-        # Loop through the list of results from your AI model
         for item in ai_output_list:
             recipient = item.get('email')
             subject = item.get('subject')
             body = item.get('matter')
 
-            # Create the email structure
             msg = MIMEMultipart()
             msg['From'] = sender_email
             msg['To'] = recipient
             msg['Subject'] = subject
             msg.attach(MIMEText(body, 'plain'))
 
-            # Send the email
             server.send_message(msg)
-            print(f"✅ Successfully sent to: {recipient}")
+            print(f"Successfully sent to: {recipient}")
 
         server.quit()
-        print("\nAll emails have been sent successfully.")
+        print("\nAll emails sent successfully.")
 
     except Exception as e:
-        print(f"❌ An error occurred: {e}")
-
+        print(f"SMTP Error: {e}")
 
 def process_new_log(restaurant_name: str, message: str):
-    print(f"\n🚀 NEW LOG DETECTED: {restaurant_name} posted a message!")
+    print(f"\nNEW LOG DETECTED: {restaurant_name}")
     
     db = SessionLocal()
     try:
-        # 1. Ask Groq (Llama 3.3) to extract the food items and cuisine
-        print(f"🧠 Running AI Extraction via {MODEL_NAME}...")
+        print(f"Running AI Extraction & Copywriting via {MODEL_NAME}...")
         
-        # We provide the schema as a string hint for Groq
+        # --- UPDATED PROMPT ---
         system_prompt = (
-            "You are a food extraction agent. Your job is to extract food entities and their cuisines. "
+            "You are an expert food logistics and marketing assistant. "
+            "1. Extract food items and their primary cuisines. "
+            "2. Write a short, exciting email body (2-3 sentences) inviting the user to come 'Grab It' before it's gone. "
+            "Address the user generally (don't use placeholders like [Name]). "
             "Respond ONLY with a valid JSON object matching this structure: "
-            "{'foods': [{'name': 'item_name', 'cuisine': 'cuisine_type', 'category': 'type', 'dietary': []}]}"
+            "{'foods': [{'name': 'item', 'cuisine': 'type'}], 'email_body': 'Your generated message here'}"
         )
         
-        user_prompt = f"Vendor: {restaurant_name}\nRaw message: {message}\nExtract food and simplify the restaurant name for matching."
+        user_prompt = f"Vendor: {restaurant_name}\nRaw message: {message}\nExtract food and draft the email alert."
 
         completion = groq_client.chat.completions.create(
             model=MODEL_NAME,
@@ -104,57 +92,55 @@ def process_new_log(restaurant_name: str, message: str):
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            temperature=0.1,
-            response_format={"type": "json_object"} # Forces valid JSON
+            temperature=0.7, # Slightly higher for more creative email writing
+            response_format={"type": "json_object"}
         )
         
-        # Parse response into our Pydantic model
         raw_json = json.loads(completion.choices[0].message.content)
         extraction = ExtractionResult(**raw_json)
 
         if not extraction or not extraction.foods:
-            print("❌ AI could not identify any food in the message.")
+            print("AI could not identify any food.")
             return
 
-        # 2. Build the keyword list 
+        # Build keywords
         search_keywords = []
         for item in extraction.foods:
             search_keywords.append(item.name.lower())
             if item.cuisine:
                 search_keywords.append(item.cuisine.lower())
-                
-        # Use simplified logic for restaurant name
         search_keywords.append(restaurant_name.lower().replace("'s", "s")) 
-        print(f"🔍 Searching DB for keywords: {list(set(search_keywords))}")
+        
+        print(f"Searching for keywords: {list(set(search_keywords))}")
 
-        # 3. The Lightning-Fast Postgres Query
         matched_users = db.query(DBUser).filter(
             DBUser.preferences.op('?|')(array(list(set(search_keywords))))
         ).all()
 
-        # 4. Send the emails
-        print(f"✅ Found {len(matched_users)} matches!")
-        my_ai_model_results = []
+        print(f"Found {len(matched_users)} matches!")
+        
+        email_queue = []
         for user in matched_users:
-            my_ai_model_results.append({
+            # Use the AI-generated email_body and personalize the greeting
+            personalized_matter = f"Hi {user.user_name}!\n\n{extraction.email_body}\n\n📍 Location: {restaurant_name}"
+            
+            email_queue.append({
                 "email": user.user_email,
-                "subject": f"Grabit - from {restaurant_name}!",
-                "matter": f"Hi {user.user_name}, {restaurant_name} has leftovers: '{message}'"
+                "subject": f"Fresh Alert from {restaurant_name}!",
+                "matter": personalized_matter
             })
-        send_gmail_to_everyone(my_ai_model_results)
-        print("Emails sent!!")
+        
+        if email_queue:
+            send_gmail_to_everyone(email_queue)
 
     except Exception as e:
-        print(f"🚨 Workflow Failed: {e}")
+        print(f"Workflow Failed: {e}")
     finally:
         db.close()
 
-# ─── The Real-Time Listener ────────────────────────────────────────────────
-
+# --- REAL-TIME LISTENER ---
 def listen_to_database():
-    """Silently listens to PostgreSQL for new row insertions via LISTEN/NOTIFY."""
-    print(f"🎧 Agent Worker (Groq Engine) started. Listening on 'new_log_channel'...")
-    
+    print(f"Agent Worker (Groq Engine) started. Listening on 'new_log_channel'...")
     conn = psycopg2.connect(DB_URI)
     conn.autocommit = True 
     cur = conn.cursor()
@@ -162,7 +148,6 @@ def listen_to_database():
 
     try:
         while True:
-            # Wait for notification with a 5-second timeout
             if select.select([conn], [], [], 5) == ([], [], []):
                 pass 
             else:
@@ -170,15 +155,10 @@ def listen_to_database():
                 while conn.notifies:
                     notify = conn.notifies.pop(0)
                     row_data = json.loads(notify.payload)
-                    
-                    r_name = row_data.get("restaurant_name", "Unknown Restaurant")
-                    msg = row_data.get("message", "")
-                    
-                    process_new_log(r_name, msg)
-                    print("\n🎧 Waiting for next log...")
-                    
+                    process_new_log(row_data.get("restaurant_name"), row_data.get("message"))
+                    print("\nWaiting for next log...")
     except KeyboardInterrupt:
-        print("\n🛑 Shutting down Agent Worker...")
+        print("\nShutting down...")
     finally:
         cur.close()
         conn.close()
