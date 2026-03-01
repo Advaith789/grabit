@@ -1,0 +1,65 @@
+# =========================
+# General / OS / IDE
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# =========================
+# FastAPI Backend (Python)
+# =========================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env
+
+# Testing / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Logs and Databases
+*.log
+*.sqlite3
+spottedcows-backend/*.db
+
+# =========================
+# Angular Frontend (Node)
+# =========================
+# Dependencies
+spottedcows-frontend/node_modules/
+node_modules/
+
+# Build output
+spottedcows-frontend/dist/
+dist/
+spottedcows-frontend/tmp/
+spottedcows-frontend/out-tsc/
+spottedcows-frontend/bazel-out/
+
+# Angular cache
+spottedcows-frontend/.angular/
+
+# Node environment variables
+spottedcows-frontend/.env
+
+# Testing
+spottedcows-frontend/coverage/
+
+# npm and yarn logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
