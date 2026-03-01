@@ -35,10 +35,16 @@ class DBUser(Base):
     user_email = Column(String, primary_key=True, index=True)
     preferences = Column(JSONB, default=list) 
 
+class DBRestaurant(Base):
+    __tablename__ = "restaurants"
+    restaurant_name = Column(String, index=True)
+    restaurant_email = Column(String, primary_key=True, index=True)
+
 class DBFood(Base):
     __tablename__ = "foods"
     id = Column(Integer, primary_key=True, autoincrement=True)
     restaurant_name = Column(String, index=True)
+    email = Column(String) # New Column
     food_item = Column(String)
     cuisine = Column(String)
     quantity = Column(String)
@@ -90,6 +96,10 @@ def process_new_log(restaurant_name: str, message: str):
     
     db = SessionLocal()
     try:
+        # Lookup the restaurant email to save into the foods table
+        db_restaurant = db.query(DBRestaurant).filter(DBRestaurant.restaurant_name == restaurant_name).first()
+        restaurant_email = db_restaurant.restaurant_email if db_restaurant else "unknown"
+
         print(f"Running AI Extraction and Copywriting via {MODEL_NAME}...")
         
         system_prompt = (
@@ -130,6 +140,7 @@ def process_new_log(restaurant_name: str, message: str):
         for item in extraction.foods:
             new_food = DBFood(
                 restaurant_name=restaurant_name,
+                email=restaurant_email, # Added email insertion here
                 food_item=item.name,
                 cuisine=item.cuisine or "Unknown",
                 quantity=item.quantity or "Unknown"
