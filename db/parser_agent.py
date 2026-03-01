@@ -9,6 +9,10 @@ from sqlalchemy import create_engine, Column, String
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.dialects.postgresql import JSONB, array
 from dotenv import load_dotenv
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 
 load_dotenv()
 
@@ -34,6 +38,48 @@ class FoodItem(BaseModel):
 
 class ExtractionResult(BaseModel):
     foods: list[FoodItem] = Field(description="List of extracted food items")
+
+def send_gmail_to_everyone(ai_output_list):
+    # --- CONFIGURATION ---
+    sender_email = "cheesehacksgrabit@gmail.com"  # Your Gmail address
+    app_password = "wcdv hxuy atro ndou"   # The 16-character App Password
+    
+    # Gmail SMTP settings
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587
+
+    try:
+        # Connect to Gmail's server
+        print("Connecting to Gmail server...")
+        # server = smtplib.SMTP(smtp_server, smtp_port)
+        # server.starttls()  # Secure the connection
+        # server.login(sender_email, app_password)
+        server = smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30)
+        server.login(sender_email, app_password)
+        
+        # Loop through the list of results from your AI model
+        for item in ai_output_list:
+            recipient = item.get('email')
+            subject = item.get('subject')
+            body = item.get('matter')
+
+            # Create the email structure
+            msg = MIMEMultipart()
+            msg['From'] = sender_email
+            msg['To'] = recipient
+            msg['Subject'] = subject
+            msg.attach(MIMEText(body, 'plain'))
+
+            # Send the email
+            server.send_message(msg)
+            print(f"✅ Successfully sent to: {recipient}")
+
+        server.quit()
+        print("\nAll emails have been sent successfully.")
+
+    except Exception as e:
+        print(f"❌ An error occurred: {e}")
+
 
 def process_new_log(restaurant_name: str, message: str):
     print(f"\n🚀 NEW LOG DETECTED: {restaurant_name} posted a message!")
@@ -88,9 +134,16 @@ def process_new_log(restaurant_name: str, message: str):
 
         # 4. Send the emails
         print(f"✅ Found {len(matched_users)} matches!")
+        my_ai_model_results = []
         for user in matched_users:
-            print(f"   📧 [NOTIFICATION] To: {user.user_email} | Hi {user.user_name}, {restaurant_name} has leftovers: '{message}'")
-            
+            my_ai_model_results.append({
+                "email": user.user_email,
+                "subject": f"Grabit - from {restaurant_name}!",
+                "matter": f"Hi {user.user_name}, {restaurant_name} has leftovers: '{message}'"
+            })
+        send_gmail_to_everyone(my_ai_model_results)
+        print("Emails sent!!")
+
     except Exception as e:
         print(f"🚨 Workflow Failed: {e}")
     finally:
