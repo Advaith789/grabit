@@ -4,7 +4,7 @@
 
 ---
 
-## 📌 Project Overview
+## Project Overview
 * **Theme:** Social Good & Sustainability
 * **Core Mission:** To eliminate urban food waste through "last-mile" sales and data-driven inventory management.
 * **The Problem:** Overproduction leads to financial loss for businesses and an environmental crisis (methane emissions), while budget-conscious consumers struggle to access quality nutrition.
@@ -29,7 +29,7 @@ Instead of using GenAI as a "chatbot," Grabit utilizes it as a **Structural Pars
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 * **Real-Time Notifications:** Automated alerts triggered by the matching engine.
 * **Waste Visualization:** A dedicated suite showing restaurants their "Total Loss Occurred," forcing a data-driven realization of their environmental footprint.
@@ -37,7 +37,7 @@ Instead of using GenAI as a "chatbot," Grabit utilizes it as a **Structural Pars
 
 ---
 
-## 🌍 Sustainability & Social Impact
+## Sustainability & Social Impact
 
 * **Carbon Reduction:** Lowering the daily CO2 footprint of participating local businesses.
 * **Nutrition Accessibility:** Providing high-protein meals to students and low-income users at **40-70% discounts**.
@@ -45,7 +45,7 @@ Instead of using GenAI as a "chatbot," Grabit utilizes it as a **Structural Pars
 
 ---
 
-## 🗺️ Future Roadmap
+## Future Roadmap
 
 1.  **Predictive Waste Analytics:** Moving from reactive to proactive by analyzing "Loss Occurred" trends to provide Demand Forecasting reports.
 2.  **Dynamic Pricing Engine:** An automated "Price-Decay" algorithm where discounts increase (e.g., 40% → 70%) as the pickup deadline approaches.
