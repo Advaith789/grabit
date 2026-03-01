@@ -1,4 +1,4 @@
-# 🥗 Grabit: Bridging the Gap Between Surplus and Sustenance
+# Grabit: Bridging the Gap Between Surplus and Sustenance
 
 **Grabit** is a real-time, AI-driven marketplace designed to combat urban food waste. By connecting restaurants with surplus inventory to local consumers at deeply discounted prices, we transform potential waste into affordable, high-quality meals.
 
@@ -11,7 +11,7 @@
 
 ---
 
-## ⚙️ Technical Architecture
+## Technical Architecture
 
 Grabit moves beyond simple API wrappers to a multi-layered automated pipeline.
 
